@@ -20,3 +20,12 @@ exports.verifyToken = async(req,res,next) =>{
         res.status(401).json({ message: "Token is not valid" })
     }
 }
+
+exports.authorize = (...role) =>{
+    return (req,res,next) =>{
+        if(!role.includes(req.user.role)){
+            return res.status(403).json({ message: "Permission denied" })
+        }
+        next()
+    }
+}
