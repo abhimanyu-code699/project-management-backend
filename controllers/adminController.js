@@ -25,7 +25,7 @@ exports.addAdmin = async(req,res) =>{
 
         await connection.query(
             "INSERT INTO users (name,email,phone,password,role) VALUES(?,?,?,?,?)",
-            [name,email,hashedPassword,phone,role]
+            [name,email,phone,hashedPassword,role]
         )
 
         return res.status(200).json({
