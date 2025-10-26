@@ -76,7 +76,7 @@ exports.login = async(req,res) =>{
         connection = await pool.getConnection();
 
         const [row] = await connection.query(
-            "SELECT email,name,password,role FROM users WHERE email = ?",
+            "SELECT id,email,name,password,role FROM users WHERE email = ?",
             [email]
         )
         if(row.length === 0){

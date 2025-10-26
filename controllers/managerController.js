@@ -262,7 +262,6 @@ exports.editManager = async (req, res) => {
   }
 };
 
-
 exports.deleteManager = async (req, res) => {
     let connection;
     const { role } = req.user; 
@@ -325,3 +324,56 @@ exports.deleteManager = async (req, res) => {
     }
 };
 
+exports.getAllProjects = async (req, res) => {
+  const { id, role } = req.user;
+  let connection;
+
+  try {
+    if (role !== "manager") {
+      return res.status(403).json({
+        message: "Permission denied: only managers can access this data.",
+      });
+    }
+
+    connection = await pool.getConnection();
+
+    // Query: fetch projects created by this manager + assigned developers
+    const [rows] = await connection.query(
+      `
+      SELECT 
+        p.id AS project_id,
+        p.project_name,
+        p.status,
+        DATE_FORMAT(p.start_date, '%Y-%m-%d %H:%i:%s') AS start_date,
+        DATE_FORMAT(p.completion_date, '%Y-%m-%d') AS completion_date,
+        JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'developer_id', u.id,
+            'developer_name', u.name,
+            'developer_email', u.email
+          )
+        ) AS assigned_developers
+      FROM projects p
+      LEFT JOIN project_developers pd ON p.id = pd.project_id
+      LEFT JOIN users u ON pd.developer_id = u.id
+      WHERE p.manager_id = ?
+      GROUP BY p.id
+      ORDER BY p.start_date DESC
+      `,
+      [id]
+    );
+
+    return res.status(200).json({
+      message: "Projects fetched successfully",
+      projects: rows,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching manager projects:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  } finally {
+    if (connection) connection.release();
+  }
+};

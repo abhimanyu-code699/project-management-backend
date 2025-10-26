@@ -25,7 +25,9 @@ app.use('/api',managerRoute);
 
 
 app.use('/',async(req,res)=>{
-    res.send('Hii From backend');
+    res.json({
+        message:'Hii from backend'
+    });
 })
 
 const PORT = process.env.PORT;
