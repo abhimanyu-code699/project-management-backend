@@ -4,6 +4,8 @@ const cors = require('cors');
 const bodyParser = require("body-parser")
 const adminRoute = require('./routes/adminRoute');
 const authRoute = require('./routes/authRoute');
+const developerRoute = require('./routes/developerRoute');
+const managerRoute = require('./routes/managerRoute');
 
 dotenv.config();
 require('./config/db');
@@ -18,7 +20,8 @@ app.use(express.urlencoded({ extended: true }))
 //apis
 app.use('/admin',adminRoute);
 app.use('/auth',authRoute);
-
+app.use('/api',developerRoute);
+app.use('/api',managerRoute);
 
 
 app.use('/',async(req,res)=>{
