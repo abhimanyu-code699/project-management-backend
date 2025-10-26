@@ -42,7 +42,7 @@ exports.register = async(req,res) =>{
             email: email,
             password 
         }
-        const templatePath = path.join(__dirname, "../mail/credential-template.ejs")
+        
         //send email to the user(password)
         await sendMail(
             email,
