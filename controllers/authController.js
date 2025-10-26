@@ -76,7 +76,7 @@ exports.login = async(req,res) =>{
         connection = await pool.getConnection();
 
         const [row] = await connection.query(
-            "SELECT email,password,role FROM users WHERE email = ?",
+            "SELECT email,name,password,role FROM users WHERE email = ?",
             [email]
         )
         if(row.length === 0){
@@ -97,6 +97,7 @@ exports.login = async(req,res) =>{
         const token = jwt.sign(
             {
                 id:user.id,
+                name:user.name,
                 email:user.email,
                 role:user.role
             },
@@ -110,7 +111,8 @@ exports.login = async(req,res) =>{
             user:{
                 id:user.id,
                 email:user.email,
-                role:user.role
+                role:user.role,
+                name:user.name
             }
         });
     } catch (error) {

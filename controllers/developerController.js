@@ -31,3 +31,30 @@ exports.getDevelopersSuggestions = async (req, res) => {
     if (connection) connection.release();
   }
 };
+
+exports.getTotalDevelopers = async(req,res) =>{
+  const { role } = req.user;
+  let connection
+  try {
+    if(role != 'admin'){
+      return res.status(409).json({
+        message:'Permission denied'
+      })
+    }
+    connection = await pool.getConnection();
+
+    const [result] = await connection.query(
+      "SELECT COUNT(id) AS totalDevelopers FROM users WHERE role = ?",
+      ['developer']
+    )
+    return res.status(200).json({
+      success:true,
+      totalDevelopers:result[0].totalDevelopers
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }finally{
+    if(connection) connection.release();
+  }
+}

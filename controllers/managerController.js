@@ -75,3 +75,56 @@ exports.addProject = async (req, res) => {
         if (connection) connection.release();
     }
 };
+
+exports.getTotalManagers = async(req,res) =>{
+    const { role } = req.user;
+    let connection
+    try {
+        if(role != 'admin'){
+            return res.status(409).json({
+                message:'Permission denied'
+            })
+        }
+        connection = await pool.getConnection();
+
+       const [result] = await connection.query(
+            "SELECT COUNT(id) AS totalManagers FROM users WHERE role = ?",
+            ['manager']
+        )
+        return res.status(200).json({
+            success:true,
+            totalManagers:result[0].totalManagers
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error);
+    }finally{
+        if(connection) connection.release();
+    }
+}
+
+exports.getTotalProjects = async(req,res) =>{
+    const { role } = req.user;
+    let connection
+    try {
+        if(role != 'admin'){
+            return res.status(409).json({
+                message:'Permission denied'
+            })
+        }
+        connection = await pool.getConnection();
+        
+        const [result] = await connection.query(
+            "SELECT COUNT(id) AS totalProjects FROM projects"
+        )
+        return res.status(200).json({
+            success:true,
+            totalProjects:result[0].totalProjects
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error);
+    }finally{
+        if(connection)connection.release();
+    }
+}
