@@ -6,6 +6,7 @@ const adminRoute = require('./routes/adminRoute');
 const authRoute = require('./routes/authRoute');
 const developerRoute = require('./routes/developerRoute');
 const managerRoute = require('./routes/managerRoute');
+const aiRoute = require('./routes/aiRoute')
 
 dotenv.config();
 require('./config/db');
@@ -13,8 +14,8 @@ require('./config/db');
 const app = express();
 
 app.use(cors({
-  origin:"https://project-management-frontend-dusky.vercel.app",
-  methods: ["GET", "POST","PATCH","PUT"], 
+  origin:["https://project-management-frontend-dusky.vercel.app","http://localhost:5173"],
+  methods: ["GET", "POST","PATCH","PUT","DELETE"], 
   credentials:true
 }))
 
@@ -27,6 +28,7 @@ app.use('/admin',adminRoute);
 app.use('/auth',authRoute);
 app.use('/api',developerRoute);
 app.use('/api',managerRoute);
+app.use('/api',aiRoute);
 
 
 app.use('/',async(req,res)=>{

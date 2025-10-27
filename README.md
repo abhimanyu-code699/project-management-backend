@@ -56,3 +56,18 @@ SMTP_PASS=yourapppassword
 4️⃣ Start the development server  
 npm run dev
 
+
+## 🧪 Postman Collection
+
+You can test all API endpoints easily using Postman.
+
+📥 **Download Collection:**
+[project-management-api.postman_collection.json](./project-management-api.postman_collection.json)
+
+deployed backend_url :-https://project-management-backend-three.vercel.app
+
+👉 Import this file into Postman:
+- Open Postman
+- Click `Import`
+- Select the downloaded file
+- Set your backend URL:- https://project-management-backend-three.vercel.app/
