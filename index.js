@@ -12,7 +12,12 @@ require('./config/db');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin:"https://project-management-frontend-dusky.vercel.app",
+  methods: ["GET", "POST","PATCH","PUT"], 
+  credentials:true
+}))
+
 app.use(bodyParser.json())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
