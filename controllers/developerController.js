@@ -1,4 +1,6 @@
 const pool = require('../config/db');
+const bcrypt = require('bcryptjs');
+const { sendMail } = require('../services/nodemailer');
 
 exports.getDevelopersSuggestions = async (req, res) => {
   let connection;
@@ -453,3 +455,168 @@ exports.addComment = async (req, res) => {
     if (connection) connection.release();
   }
 };
+
+exports.editDeveloper = async (req, res) => {
+  let connection;
+  const { role } = req.user; 
+  const { developerId } = req.params; 
+  const { name, email, phone, password } = req.body;
+
+  try {
+
+    if (role !== "admin") {
+      return res.status(403).json({ message: "Permission denied. Only admin can edit developer details." });
+    }
+
+    if (!developerId) {
+      return res.status(400).json({ message: "Developer ID is required" });
+    }
+
+    connection = await pool.getConnection();
+
+    const [existing] = await connection.query(
+      "SELECT * FROM users WHERE id = ? AND role = 'developer'",
+      [developerId]
+    );
+
+    if (existing.length === 0) {
+      return res.status(404).json({ message: "Developer not found or role mismatch" });
+    }
+
+    const fields = [];
+    const values = [];
+
+    if (name) {
+      fields.push("name = ?");
+      values.push(name);
+    }
+    if (email) {
+      fields.push("email = ?");
+      values.push(email);
+    }
+    if (phone) {
+      fields.push("phone = ?");
+      values.push(phone);
+    }
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 7);
+      fields.push("password = ?");
+      values.push(hashedPassword);
+    }
+
+    if (fields.length === 0) {
+      return res.status(400).json({ message: "No fields provided for update" });
+    }
+
+    values.push(developerId);
+    const updateQuery = `UPDATE users SET ${fields.join(", ")} WHERE id = ? AND role = 'developer'`;
+    const [result] = await connection.query(updateQuery, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Developer not found or update failed" });
+    }
+
+    const [updated] = await connection.query(
+      "SELECT id, name, email, phone, role, created_at FROM users WHERE id = ?",
+      [developerId]
+    );
+
+    const developer = updated[0];
+
+    if (password || email) {
+      const emailData = {
+        role: developer.role,
+        email: developer.email,
+        password: password ? password : "Your old password remains unchanged",
+      };
+      await sendMail(
+        developer.email,
+        "Your Account Credentials Updated",
+        "credential-template",
+        emailData
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Developer updated successfully",
+      developer,
+    });
+  } catch (error) {
+    console.error("Error editing developer:", error);
+    res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  } finally {
+    if (connection) connection.release();
+  }
+};
+
+exports.deleteDeveloper = async (req, res) => {
+  let connection;
+  const { role } = req.user; 
+  const { developerId } = req.params;
+
+  try {
+    if (!developerId) {
+      return res.status(400).json({ message: "Developer ID is required" });
+    }
+
+    if (role !== "admin") {
+      return res.status(403).json({ message: "Permission denied" });
+    }
+
+    connection = await pool.getConnection();
+
+    const [developerRows] = await connection.query(
+      "SELECT * FROM users WHERE id = ? AND role = 'developer'",
+      [developerId]
+    );
+
+    if (developerRows.length === 0) {
+      return res.status(404).json({ message: "Developer not found or role mismatch" });
+    }
+
+    const [projectAssignments] = await connection.query(
+      "SELECT COUNT(*) AS totalProjects FROM project_developers WHERE developer_id = ?",
+      [developerId]
+    );
+
+    if (projectAssignments[0].totalProjects > 0) {
+      return res.status(409).json({
+        message: "Cannot delete developer: assigned to active projects",
+      });
+    }
+
+    const [taskAssignments] = await connection.query(
+      "SELECT COUNT(*) AS totalTasks FROM project_tasks WHERE developer_id = ?",
+      [developerId]
+    );
+
+    if (taskAssignments[0].totalTasks > 0) {
+      return res.status(409).json({
+        message: "Cannot delete developer: assigned to active project tasks",
+      });
+    }
+
+    await connection.query(
+      "DELETE FROM users WHERE id = ? AND role = 'developer'",
+      [developerId]
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Developer deleted successfully",
+    });
+  } catch (error) {
+    console.error("❌ Delete developer error:", error);
+    res.status(500).json({
+      message: "Something went wrong",
+      error: error.message,
+    });
+  } finally {
+    if (connection) connection.release();
+  }
+};
+

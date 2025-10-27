@@ -329,7 +329,7 @@ exports.getAllProjects = async (req, res) => {
   let connection;
 
   try {
-    if (role !== "manager") {
+    if (role != "manager") {
       return res.status(403).json({
         message: "Permission denied: only managers can access this data.",
       });
@@ -377,3 +377,159 @@ exports.getAllProjects = async (req, res) => {
     if (connection) connection.release();
   }
 };
+
+exports.createTask = async (req, res) => {
+  const { id, role } = req.user;
+  const { projectId, taskName, developerId, completion_date } = req.body;
+
+  let connection;
+  try {
+    if (role !== 'manager') {
+      return res.status(403).json({
+        success: false,
+        message: 'Only managers can create tasks',
+      });
+    }
+
+    if (!projectId || !taskName || !developerId || !completion_date) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fields (projectId, taskName, developerId, completion_date) are required',
+      });
+    }
+
+    connection = await pool.getConnection();
+    await connection.beginTransaction();
+
+    const [row] = await connection.query(
+      "SELECT email FROM users WHERE id = ?",
+      [developerId]
+    )
+    const email = row[0].email;
+
+    const [result] = await connection.query(
+      "SELECT name FROM users WHERE id = ?",
+      [id]
+    )
+    const managerName = result[0].name;
+
+    const [projectDetails] = await connection.query(
+      "SELECT project_name FROM projects WHERE id = ?",
+      [projectId]
+    )
+    const projectName = projectDetails[0].project_name;
+
+    const [taskResult] = await connection.query(
+      `INSERT INTO tasks (task, assigned_by, completion_date) VALUES (?, ?, ?)`,
+      [taskName, id, completion_date]
+    );
+
+    const taskId = taskResult.insertId;
+
+    await connection.query(
+      `INSERT INTO project_tasks (project_id, task_id, developer_id, tasks, status)
+       VALUES (?, ?, ?, ?, 'to-do')`,
+      [projectId, taskId, developerId, taskName]
+    );
+
+    await connection.commit();
+
+    const emailData = {
+      task:taskName,
+      project_name:projectName,
+      managerName,
+      completion_date
+    }
+    
+    await sendMail(
+        email,
+        "Task Assigned", 
+        "task-template", 
+        emailData 
+    )
+
+    res.status(201).json({
+      success: true,
+      message: 'Task created successfully',
+      data: {
+        taskId,
+        projectId,
+        developerId,
+        taskName,
+        completion_date,
+      },
+    });
+  } catch (error) {
+    if (connection) await connection.rollback();
+    console.error('❌ Error creating task:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  } finally {
+    if (connection) connection.release();
+  }
+};
+
+exports.viewTasks = async (req, res) => {
+  const { id, role } = req.user; 
+  let connection;
+
+  try {
+    if (role !== "manager") {
+      return res.status(403).json({
+        success: false,
+        message: "Only managers can view their tasks",
+      });
+    }
+
+    connection = await pool.getConnection();
+
+    const [tasks] = await connection.query(
+      `
+      SELECT 
+          t.id AS task_id,
+          t.task AS task_name,
+          t.status AS task_status,
+          t.completion_date,
+          t.created_at AS created_at,
+          p.id AS project_id,
+          p.project_name,
+          u.id AS developer_id,
+          u.name AS developer_name,
+          u.email AS developer_email
+      FROM tasks t
+      JOIN project_tasks pt ON t.id = pt.task_id
+      JOIN projects p ON pt.project_id = p.id
+      JOIN users u ON pt.developer_id = u.id
+      WHERE t.assigned_by = ?
+      ORDER BY t.created_at DESC
+      `,
+      [id]
+    );
+
+    if (tasks.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No tasks found for this manager",
+        data: [],
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Tasks fetched successfully",
+      count: tasks.length,
+      data: tasks,
+    });
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  } finally {
+    if (connection) connection.release();
+  }
+};
+

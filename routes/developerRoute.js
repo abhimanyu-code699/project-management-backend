@@ -9,7 +9,9 @@ const {
     activeTasks,
     newTasks,
     updateTaskStatus,
-    addComment
+    addComment,
+    editDeveloper,
+    deleteDeveloper
 } = require('../controllers/developerController');
 const router = express.Router();
 
@@ -22,5 +24,7 @@ router.get('/get-active-tasks',verifyToken,activeTasks);
 router.get('/get-new-tasks',verifyToken,newTasks);
 router.put('/update-task-status/:taskId',verifyToken,updateTaskStatus);
 router.post('/comment-task/:taskId',verifyToken,addComment);
+router.put('/edit-developer/:developerId',verifyToken,editDeveloper);
+router.delete('/delete-developer/:developerId',verifyToken,deleteDeveloper);
 
 module.exports = router;

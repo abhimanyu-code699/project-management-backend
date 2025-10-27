@@ -38,3 +38,64 @@ exports.addAdmin = async(req,res) =>{
         if(connection) connection.release();
     }
 }
+
+exports.getAllProjectsData = async (req, res) => {
+  const { role } = req.user;
+  let connection;
+
+  try {
+    if (role !== 'admin') {
+      return res.status(405).json({
+        success: false,
+        message: 'This data can only be accessed by admin',
+      });
+    }
+
+    connection = await pool.getConnection();
+
+    const [projects] = await connection.query(`
+      SELECT 
+        p.id,
+        p.project_name,
+        p.status,
+        p.start_date,
+        p.completion_date,
+        u.name AS manager_name
+      FROM projects p
+      INNER JOIN users u ON p.manager_id = u.id
+      ORDER BY p.id DESC
+    `);
+
+    const [developers] = await connection.query(`
+      SELECT 
+        pd.project_id,
+        u.name AS developer_name
+      FROM project_developers pd
+      INNER JOIN users u ON pd.developer_id = u.id
+    `);
+
+    const projectData = projects.map((project) => {
+      const assignedDevelopers = developers
+        .filter((dev) => dev.project_id === project.id)
+        .map((dev) => dev.developer_name);
+
+      return {
+        ...project,
+        developers: assignedDevelopers,
+      };
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: projectData,
+    });
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while fetching projects',
+    });
+  } finally {
+    if (connection) connection.release();
+  }
+};

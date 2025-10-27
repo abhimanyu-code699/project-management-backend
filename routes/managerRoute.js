@@ -1,5 +1,15 @@
 const express = require('express');
-const { addProject, getTotalManagers, getTotalProjects, getManagersData, editManager, deleteManager, getAllProjects } = require('../controllers/managerController');
+const { 
+    addProject, 
+    getTotalManagers, 
+    getTotalProjects, 
+    getManagersData, 
+    editManager, 
+    deleteManager, 
+    getAllProjects, 
+    createTask, 
+    viewTasks
+} = require('../controllers/managerController');
 const { verifyToken } = require('../middleware/authMiddleware');
 const router = express.Router();
 
@@ -10,5 +20,7 @@ router.get('/getManager-data',verifyToken,getManagersData);
 router.put('/edit-manager/:managerId',verifyToken,editManager);
 router.delete('/delete-manager/:managerId',verifyToken,deleteManager);
 router.get('/get-all-projects',verifyToken,getAllProjects);
+router.post('/create-task',verifyToken,createTask);
+router.get('/view-tasks',verifyToken,viewTasks);
 
 module.exports = router;
