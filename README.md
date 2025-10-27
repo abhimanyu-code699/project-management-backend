@@ -38,7 +38,7 @@ Below is the overall system flow for the project management backend:
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone the repository
-git clone https://github.com/abhimanyu-dev/project-management-backend.git  
+git clone git@github.com:abhimanyu-code699/project-management-backend.git
 
 2️⃣ Install dependencies  
 npm install  
@@ -57,17 +57,7 @@ SMTP_PASS=yourapppassword
 npm run dev
 
 
-## 🧪 Postman Collection
+## 🚀 API Documentation (Postman)
+You can directly view or import the full Postman collection here:
 
-You can test all API endpoints easily using Postman.
-
-📥 **Download Collection:**
-[project-management-api.postman_collection.json](./project-management-api.postman_collection.json)
-
-deployed backend_url :-https://project-management-backend-three.vercel.app
-
-👉 Import this file into Postman:
-- Open Postman
-- Click `Import`
-- Select the downloaded file
-- Set your backend URL:- https://project-management-backend-three.vercel.app/
+👉 [View Postman Collection](https://www.postman.com/workspace/project_management~6c1e56a1-1ffc-4942-9cd7-f49fb94bd15a/collection/31680014-466586b8-028a-4b69-bd2e-7a718b9e60e9?action=share&source=copy-link&creator=31680014)
