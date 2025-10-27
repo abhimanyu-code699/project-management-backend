@@ -14,7 +14,7 @@ require('./config/db');
 const app = express();
 
 app.use(cors({
-  origin:["https://project-management-frontend-dusky.vercel.app","http://localhost:5173"],
+  origin:"https://project-management-frontend-dusky.vercel.app",
   methods: ["GET", "POST","PATCH","PUT","DELETE"], 
   credentials:true
 }))
