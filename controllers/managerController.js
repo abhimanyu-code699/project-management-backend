@@ -27,7 +27,7 @@ exports.addProject = async (req, res) => {
 
     // Find manager ID
     const [result] = await connection.query(
-      "SELECT id FROM users WHERE email = ? AND role = ?",
+      "SELECT id,name FROM users WHERE email = ? AND role = ?",
       [email, role]
     );
 
@@ -36,7 +36,13 @@ exports.addProject = async (req, res) => {
     }
 
     const managerId = result[0].id;
+    const managerName = result[0].name;
 
+    const [row] = await connection.query(
+      "SELECT email FROM users WHERE id = ?",
+      [assigned_to]
+    )
+    const developerEmail = row[0].email;
     // Insert into projects
     const [projectRes] = await connection.query(
       "INSERT INTO projects (project_name, manager_id, completion_date) VALUES (?, ?, ?)",
@@ -64,6 +70,20 @@ exports.addProject = async (req, res) => {
       "INSERT INTO project_tasks (project_id, task_id, developer_id, tasks) VALUES (?, ?, ?, ?)",
       [projectId, taskId, assigned_to, task]
     );
+
+    const emailData = {
+      project_name,
+      managerName,
+      task,
+      completion_date
+    }
+
+    await sendMail(
+      developerEmail,
+      "Project Assigned",
+      "project-template",
+      emailData
+    )
 
     return res.status(200).json({
       message: "Project created successfully",

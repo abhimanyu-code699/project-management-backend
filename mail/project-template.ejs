@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            color: #333;
+        }
+
+        .task {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .credentials {
+            margin: 20px 0;
+            background-color: #f2f2f2;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .credentials p {
+            margin: 0;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #777;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3>Hello,</h3>
+        <p> You have been assigned the new Project <span class="task">
+                <%= project_name %>
+            </span>by <%=managerName %>.</p>
+
+        <p>Task Details</p>
+        <div class="credentials">
+            <p><strong>Task:</strong>
+                <%= task %>
+            </p>
+            <p><strong>Completion Date:</strong>
+                <%= completion_date %>
+            </p>
+        </div>
+
+        <p>Thank you,</p>
+        <p>The Team</p>
+
+        <div class="footer">
+            <p>If you have any issues or did not request this email, please contact our support team.</p>
+        </div>
+    </div>
+</body>
+
+</html>
