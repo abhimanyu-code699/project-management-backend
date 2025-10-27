@@ -1,0 +1,574 @@
+{
+	"info": {
+		"_postman_id": "466586b8-028a-4b69-bd2e-7a718b9e60e9",
+		"name": "project_management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31680014"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "add admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Abhimanyu\",\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"admin@123\",\r\n    \"phone\":\"7488957748\",\r\n    \"role\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/admin/add-admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"admin",
+								"add-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all projects data",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Abhimanyu\",\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"admin@123\",\r\n    \"phone\":\"7488957748\",\r\n    \"role\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/admin/add-admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"admin",
+								"add-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all projects data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwibmFtZSI6IkFiaGltYW55dSIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNTM5NDI4LCJleHAiOjE3NjE2MjU4Mjh9.nbQX_nLjfKIYCf_gWw8mRCTTN6lKyb4MTa0x_GAomQs",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7001/admin/getAll-projects-data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"admin",
+								"getAll-projects-data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\": \"admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6IkFiaGltYW55dSIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxNTM3MjkxLCJleHAiOjE3NjE2MjM2OTF9.Jfk9jYJlqxWXYxVWir6dq07UqOZKCKj2N3rPFfqlbVk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Naman\",\r\n    \"email\":\"abhinewjob07@gmail.com\",\r\n    \"password\":\"newPass\",\r\n    \"phone\":\"9857485968\",\r\n    \"role\":\"manager\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "developer",
+			"item": [
+				{
+					"name": "get developer suggestions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7001/api/get-developers?query=d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"get-developers"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get total devlopers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7001/api/tota-developers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"tota-developers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload task status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkRldmVsb3BlciIsImVtYWlsIjoiY2EyNzkxMzZAZ21haWwuY29tIiwicm9sZSI6ImRldmVsb3BlciIsImlhdCI6MTc2MTUwMTUwMSwiZXhwIjoxNzYxNTg3OTAxfQ.XWRa7JIJ51NAuWLyhhzIdV7OX1jjxj9oTV87WB2UPc0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"in-progress\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/api/update-task-status/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"update-task-status",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "comment task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwibmFtZSI6IkRldmVsb3BlciIsImVtYWlsIjoiY2EyNzkxMzZAZ21haWwuY29tIiwicm9sZSI6ImRldmVsb3BlciIsImlhdCI6MTc2MTUwMTUwMSwiZXhwIjoxNzYxNTg3OTAxfQ.XWRa7JIJ51NAuWLyhhzIdV7OX1jjxj9oTV87WB2UPc0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"write your comments here\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/api/comment-task/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"comment-task",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "project manager",
+			"item": [
+				{
+					"name": "add project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibmFtZSI6Ik1hbmFnZXIyIiwiZW1haWwiOiJhYmhpbmV3am9iMDdAZ21haWwuY29tIiwicm9sZSI6Im1hbmFnZXIiLCJpYXQiOjE3NjE1MDQxMDUsImV4cCI6MTc2MTU5MDUwNX0.jGb890lwL6A54GJNesQGfkV0KfI5KVJu7Wh-e5r1Pg8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"project_name\":\"Healthcare application\",\r\n    \"assigned_to\":\"5\",\r\n    \"task\":\"Complete backend\",\r\n    \"completion_date\":\"2025-10-28\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/api/add-project",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"add-project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get total managers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibmFtZSI6Ik1hbmFnZXIyIiwiZW1haWwiOiJhYmhpbmV3am9iMDdAZ21haWwuY29tIiwicm9sZSI6Im1hbmFnZXIiLCJpYXQiOjE3NjE1MDQxMDUsImV4cCI6MTc2MTU5MDUwNX0.jGb890lwL6A54GJNesQGfkV0KfI5KVJu7Wh-e5r1Pg8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7001/api/total-mangers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"total-mangers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get total projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwibmFtZSI6Ik1hbmFnZXIyIiwiZW1haWwiOiJhYmhpbmV3am9iMDdAZ21haWwuY29tIiwicm9sZSI6Im1hbmFnZXIiLCJpYXQiOjE3NjE1MDQxMDUsImV4cCI6MTc2MTU5MDUwNX0.jGb890lwL6A54GJNesQGfkV0KfI5KVJu7Wh-e5r1Pg8",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7001/api/total-projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"total-projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get manager data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:70001/api/getManager-data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "70001",
+							"path": [
+								"api",
+								"getManager-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit manager",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Edited Name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:7001/api/edit-manager/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"edit-manager",
+								"3"
+							],
+							"query": [
+								{
+									"key": "auth",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete manager",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7001/api/delete-manager/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"delete-manager",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7001/api/get-all-projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"get-all-projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"projectId\":\"1\",\r\n    \"taskName\":\"create banckend\",\r\n    \"developerId\":\"5\",\r\n    \"completion_date\":\"2025-10-29\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:7001/api/create-task",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"create-task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "view tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:7001/api/view-tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7001",
+							"path": [
+								"api",
+								"view-tasks"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWJoaW1hbnl1IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjE0Njg4NjYsImV4cCI6MTc2MTU1NTI2Nn0.OwczXppKJwvvg-E1TJeKRZwARFr9xFDhOoq-Ms7dx7s",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
