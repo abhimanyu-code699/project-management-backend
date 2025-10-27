@@ -421,31 +421,44 @@ exports.createTask = async (req, res) => {
     connection = await pool.getConnection();
     await connection.beginTransaction();
 
-    const [row] = await connection.query(
+    // 1️⃣ Developer email
+    const [devRows] = await connection.query(
       "SELECT email FROM users WHERE id = ?",
       [developerId]
-    )
-    const email = row[0].email;
+    );
+    if (!devRows.length) {
+      throw new Error("Developer not found");
+    }
+    const email = devRows[0].email;
 
-    const [result] = await connection.query(
+    // 2️⃣ Manager name
+    const [managerRows] = await connection.query(
       "SELECT name FROM users WHERE id = ?",
       [id]
-    )
-    const managerName = result[0].name;
+    );
+    if (!managerRows.length) {
+      throw new Error("Manager not found");
+    }
+    const managerName = managerRows[0].name;
 
-    const [projectDetails] = await connection.query(
+    // 3️⃣ Project name
+    const [projectRows] = await connection.query(
       "SELECT project_name FROM projects WHERE id = ?",
       [projectId]
-    )
-    const projectName = projectDetails[0].project_name;
+    );
+    if (!projectRows.length) {
+      throw new Error("Project not found");
+    }
+    const projectName = projectRows[0].project_name;
 
+    // 4️⃣ Create task
     const [taskResult] = await connection.query(
-      `INSERT INTO tasks (task, assigned_by, completion_date) VALUES (?, ?, ?)`,
+      "INSERT INTO tasks (task, assigned_by, completion_date) VALUES (?, ?, ?)",
       [taskName, id, completion_date]
     );
-
     const taskId = taskResult.insertId;
 
+    // 5️⃣ Link project-task-developer
     await connection.query(
       `INSERT INTO project_tasks (project_id, task_id, developer_id, tasks, status)
        VALUES (?, ?, ?, ?, 'to-do')`,
@@ -454,42 +467,38 @@ exports.createTask = async (req, res) => {
 
     await connection.commit();
 
-    const emailData = {
-      task:taskName,
-      project_name:projectName,
-      managerName,
-      completion_date
-    }
-    
-    await sendMail(
-        email,
-        "Task Assigned", 
-        "task-template", 
-        emailData 
-    )
-
-    res.status(201).json({
-      success: true,
-      message: 'Task created successfully',
-      data: {
-        taskId,
-        projectId,
-        developerId,
-        taskName,
+    // 6️⃣ Email safely
+    try {
+      const emailData = {
+        task: taskName,
+        project_name: projectName,
+        managerName,
         completion_date,
-      },
+      };
+
+      await sendMail(email, "Task Assigned", "task-template", emailData);
+    } catch (mailErr) {
+      console.error("⚠️ Email sending failed:", mailErr.message);
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "Task created successfully",
+      data: { taskId, projectId, developerId, taskName, completion_date },
     });
   } catch (error) {
     if (connection) await connection.rollback();
-    console.error('❌ Error creating task:', error);
-    res.status(500).json({
+    console.error("❌ Error creating task:", error.message);
+    return res.status(500).json({
       success: false,
-      message: 'Internal Server Error',
+      message: "Internal Server Error",
+      error: error.message,
     });
   } finally {
     if (connection) connection.release();
   }
 };
+
 
 exports.viewTasks = async (req, res) => {
   const { id, role } = req.user; 
